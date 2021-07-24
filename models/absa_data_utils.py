@@ -158,7 +158,50 @@ class AscProcessor(DataProcessor):
             examples.append(
                 InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
         return examples     
-    
+
+def tokenize_part(examples, label_list, max_seq_length, tokenizer, mode):
+    label_map = {}
+    for (i, label) in enumerate(label_list):
+        label_map[label] = i
+
+    features = []
+    for (ex_index, example) in enumerate(examples):
+        if mode!="ae":
+            tokens_a = tokenizer.tokenize(example.text_a)
+        else: #only do subword tokenization.
+            tokens_a, labels_a, example.idx_map= tokenizer.subword_tokenize([token.lower() for token in example.text_a], example.label )
+        tokens_b = None
+        if example.text_b:
+            tokens_b = tokenizer.tokenize(example.text_b)
+
+        if tokens_b:
+            # Modifies `tokens_a` and `tokens_b` in place so that the total
+            # length is less than the specified length.
+            # Account for [CLS], [SEP], [SEP] with "- 3"
+            _truncate_seq_pair(tokens_a, tokens_b, max_seq_length - 3)
+        else:
+            # Account for [CLS] and [SEP] with "- 2"
+            if len(tokens_a) > max_seq_length - 2:
+                tokens_a = tokens_a[0:(max_seq_length - 2)]
+
+        tokens = []
+        segment_ids = []
+        tokens.append("[CLS]")
+        segment_ids.append(0)
+        for token in tokens_a:
+            tokens.append(token)
+            segment_ids.append(0)
+        tokens.append("[SEP]")
+        segment_ids.append(0)
+
+        if tokens_b:
+            for token in tokens_b:
+                tokens.append(token)
+                segment_ids.append(1)
+            tokens.append("[SEP]")
+            segment_ids.append(1)
+        return tokens 
+
 def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer, mode):
     """Loads a data file into a list of `InputBatch`s.""" #check later if we can merge this function with the SQuAD preprocessing 
     label_map = {}
@@ -171,7 +214,6 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
             tokens_a = tokenizer.tokenize(example.text_a)
         else: #only do subword tokenization.
             tokens_a, labels_a, example.idx_map= tokenizer.subword_tokenize([token.lower() for token in example.text_a], example.label )
-
         tokens_b = None
         if example.text_b:
             tokens_b = tokenizer.tokenize(example.text_b)
