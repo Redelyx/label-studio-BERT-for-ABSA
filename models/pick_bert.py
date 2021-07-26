@@ -26,4 +26,5 @@ def pick_model(bert_task, bert_model, label_list):
     else:
         print("Task or model not valid.")
 
-
+def pick_domain():
+    return c.bert
