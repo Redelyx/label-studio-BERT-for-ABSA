@@ -61,9 +61,10 @@ label-studio-ml start my-ml-backend-asc
 label-studio start my-annotation-project --init --ml-backend http://localhost:9090
 ```
 
-~The browser opens at `http://localhost:8080`. Upload your data on **Import** page then annotate by selecting **Labeling** page.
+The browser opens at `http://localhost:8080`. Upload your data on **Import** page ~then annotate by selecting **Labeling** page.
 Once you've annotate sufficient amount of data, go to **Model** page and press **Start Training** button. Once training is finished, model automatically starts serving for inference from Label Studio, and you'll find all model checkpoints inside `my-ml-backend/<ml-backend-id>/` directory.~
 (Not available yet)
+
 
 [Click here](https://labelstud.io/guide/ml.html) to read more about how to use Machine Learning backend and build Human-in-the-Loop pipelines with Label Studio
 
