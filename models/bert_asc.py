@@ -1,7 +1,6 @@
 import torch
 import os
 from label_studio_ml.model import LabelStudioMLBase
-import ipdb
 import logging
 
 import absa_data_utils as data_utils
@@ -104,20 +103,21 @@ class BertASC(LabelStudioMLBase):
                 start = sentence.find(term)
                 end = start + len(term)
             label = prediction_tmp[n_line].label
+            score = prediction_tmp[n_line].score.item()
             
             print(start, end, label)
-            prediction.append({
-                'from_name': from_name,
-                'to_name': to_name,
-                'type': 'labels',
-                'value': {
-                    'labels': [self.label_list[label]],
-                    'start': start,
-                    'end': end, 
-                    'text': term}
-                    })
             predictions.append({
-                'result': prediction,
+                'result':[{
+                    'from_name': from_name,
+                    'to_name': to_name,
+                    'type': 'labels',
+                    'value': {
+                        'labels': [self.label_list[label]],
+                        'start': start,
+                        'end': end, 
+                        'text': term}
+                }],
+                'score': score
             })
 
         return predictions

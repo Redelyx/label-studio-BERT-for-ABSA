@@ -1,7 +1,6 @@
 import torch
 import os
 from label_studio_ml.model import LabelStudioMLBase
-import ipdb
 import logging
 
 import absa_data_utils as data_utils
