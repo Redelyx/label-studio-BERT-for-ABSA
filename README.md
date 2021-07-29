@@ -107,7 +107,7 @@ This is the code for the ASC labeling interface:
 
 For AE task you can import a *.txt file with one sentence per line.
 For ASC task you can import a *.tsv file similiar to this:
-```tsv
+```
 sentence	term
 The screen is nice, side view angles are pretty good	screen
 Applications respond immediately (not like the tired MS applications).	Applications
