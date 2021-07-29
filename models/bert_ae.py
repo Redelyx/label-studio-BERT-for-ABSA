@@ -1,8 +1,6 @@
 import torch
 import os
 from label_studio_ml.model import LabelStudioMLBase
-import logging
-
 import absa_data_utils as data_utils
 from absa_data_utils import ABSATokenizer
 from absa_data_utils import InputExample
@@ -12,11 +10,6 @@ import modelconfig
  
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
-                    datefmt = '%m/%d/%Y %H:%M:%S',
-                    level = logging.INFO)
-logger = logging.getLogger(__name__)
-
 if torch.cuda.is_available():
     device = torch.device("cuda")
     print('There are %d GPU(s) available.' % torch.cuda.device_count())
@@ -24,7 +17,6 @@ if torch.cuda.is_available():
 else:
     print('No GPU available, using the CPU instead.')
     device = torch.device("cpu")
-
 
 class Prediction(object):
     def __init__(self, label, mask, score):

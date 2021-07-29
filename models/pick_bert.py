@@ -1,8 +1,4 @@
-import os,sys,inspect
-from os.path import dirname
-import modelconfig
 import run_config as c   
-import ipdb  
 
 def pick_model(bert_task, bert_model, label_list):
     if c.btype == "at":
