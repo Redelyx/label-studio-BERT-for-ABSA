@@ -68,6 +68,53 @@ Once you've annotate sufficient amount of data, go to **Model** page and press *
 
 [Click here](https://labelstud.io/guide/ml.html) to read more about how to use Machine Learning backend and build Human-in-the-Loop pipelines with Label Studio
 
+
+## Other useful instructions
+You can find explanations for these instructions here:
+
+[Set up your labeling interface](https://labelstud.io/guide/setup.html)
+
+[Get data into Label Studio](https://labelstud.io/guide/tasks.html)
+### Set up your labeling interface on Label Studio
+
+This is the code for the AE labeling interface:
+```html
+<View>
+  <Labels name="label" toName="text">
+    <Label value="B" background="#fd8326"/>
+    <Label value="I" background="#fff570"/>
+  </Labels>
+  <Text name="text" value="$text"/>
+</View>
+
+```
+This is the code for the ASC labeling interface:
+```html
+<View>
+  <Labels name="label" toName="text">
+    <Label value="positive" background="green"/>
+    <Label value="negative" background="#ff0d00"/>
+    <Label value="neutral" background="#f79b55"/>
+  </Labels>
+  <Header value="Sentence"/>
+  <Text name="text" value="$sentence"/>
+  <Header value="Aspect"/>
+  <Text name="text1" value="$term"/>
+</View>
+```
+
+### Import dataset
+
+For AE task you can import a *.txt file with one sentence per line.
+For ASC task you can import a *.tsv file similiar to this:
+```tsv
+sentence	term
+The screen is nice, side view angles are pretty good	screen
+Applications respond immediately (not like the tired MS applications).	Applications
+i also love having the extra calculator number set up on the keyboard.	calculator number
+```
+
+
 ## License
 
 This software is licensed under the [Apache 2.0 LICENSE](/LICENSE) © [Heartex](https://www.heartex.ai/). 2020
