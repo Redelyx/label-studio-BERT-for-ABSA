@@ -2,8 +2,7 @@ import torch
 import os
 from label_studio_ml.model import LabelStudioMLBase
 import absa_data_utils as data_utils
-from absa_data_utils import ABSATokenizer
-from absa_data_utils import InputExample
+from absa_data_utils import ABSATokenizer, Prediction, InputExample
 from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
 import pick_bert
 import modelconfig
@@ -17,12 +16,6 @@ if torch.cuda.is_available():
 else:
     print('No GPU available, using the CPU instead.')
     device = torch.device("cpu")
-
-class Prediction(object):
-    def __init__(self, label, mask, score):
-        self.label = label
-        self.mask = mask
-        self.score = score
 
 class BertASC(LabelStudioMLBase):
     def __init__(self, **kwargs):

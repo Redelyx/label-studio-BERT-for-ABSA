@@ -16,11 +16,15 @@
 
 import json
 import os
-from collections import defaultdict
-import random
 
 from transformers import BertTokenizer
 
+class Prediction(object):
+    def __init__(self, label, mask, score, tokenized_line = []):
+        self.label = label
+        self.mask = mask
+        self.score = score
+        self.tokenized_line = tokenized_line
 class ABSATokenizer(BertTokenizer):     
     def subword_tokenize(self, tokens, labels): # for AE
         split_tokens, split_labels= [], []
