@@ -1,7 +1,7 @@
 
 #main (these are the ones you have to touch more often)
 task = "ae"              #ae (Aspect Extraction) or asc (Aspect Sentiment Classification)
-btype = "psum"           #at (Adversarial Training) or psum or hsum
+btype = "hsum"           #at (Adversarial Training) or psum or hsum
 domain = "laptop"          #laptop or rest
 
 

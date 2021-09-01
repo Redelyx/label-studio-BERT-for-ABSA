@@ -1,5 +1,6 @@
 import torch
 import os
+import unicodedata
 from label_studio_ml.model import LabelStudioMLBase
 from absa_data_utils import Prediction, ABSATokenizer, InputExample
 import absa_data_utils as data_utils
@@ -47,7 +48,6 @@ class BertABSA(LabelStudioMLBase):
                 InputExample(guid = guid, text_a=text_tokenized, label = dummy_labels))
 
         lines_features = data_utils.convert_examples_to_features(lines, self.ae_label_list, self.max_seq_length, self.tokenizer, self.bert_tasks[0])
-
         all_input_ids = torch.tensor([f.input_ids for f in lines_features], dtype=torch.long)
         all_segment_ids = torch.tensor([f.segment_ids for f in lines_features], dtype=torch.long)
         all_input_mask = torch.tensor([f.input_mask for f in lines_features], dtype=torch.long)
@@ -57,7 +57,6 @@ class BertABSA(LabelStudioMLBase):
         # Run prediction for full data
         eval_sampler = SequentialSampler(eval_data)
         eval_dataloader = DataLoader(eval_data, sampler=eval_sampler, batch_size=self.batch_size)
-
         self.ae_model.to(device)
         self.ae_model.eval()
 
@@ -65,7 +64,6 @@ class BertABSA(LabelStudioMLBase):
 
         for step, batch in enumerate(eval_dataloader):
             i = 0
-            
             batch = tuple(t.to(device) for t in batch)
             input_ids, segment_ids, input_mask, label_ids = batch
             
@@ -150,17 +148,22 @@ class BertABSA(LabelStudioMLBase):
 
         predictions_ae = self.aspectExtraction(texts)
 
+
         for n_line in range(len(texts)):
             terms = []
             sentence = texts[n_line]
 
-            for n_word in range(len(predictions_ae[n_line].tokenized_line)):
-                if predictions_ae[n_line].label[n_word] == 1:
-                    term_tmp = predictions_ae[n_line].tokenized_line[n_word]
-                    n_word = n_word + 1
+            for n_word in range(len(predictions_ae[n_line].tokenized_line)):#per ogni parola tokenizzata
+                if predictions_ae[n_line].label[n_word] == 1:#se il label è uguale a 1 ('B')
+                    term_tmp = predictions_ae[n_line].tokenized_line[n_word]#salvo il termine
+                    n_word = n_word + 1#vado al token successivo
                     while n_word<len(predictions_ae[n_line].tokenized_line) and predictions_ae[n_line].label[n_word]==2: #quando c è un punto anziche uno spazio non viene riconosciuto, cerco nella frase gia qui?
-                        term_tmp = term_tmp + ' ' + predictions_ae[n_line].tokenized_line[n_word]
+                        new_term = ' ' + predictions_ae[n_line].tokenized_line[n_word]
+                        if(new_term.startswith(" ##")): 
+                            new_term = new_term[3:]
+                        term_tmp = term_tmp + new_term
                         n_word = n_word + 1
+                    
                     terms.append(term_tmp)
             if len(terms)>0:
                 for term in terms:
@@ -180,6 +183,7 @@ class BertABSA(LabelStudioMLBase):
             for i in range(len(predictions_asc[0])):
                 sentence_f = predictions_asc[0][i]
                 if(text == sentence_f):
+                    sentence_f = unicodedata.normalize('NFKD', sentence_f.lower()).encode('ascii', 'ignore').decode('utf8')
                     term_f = predictions_asc[1][i]
                     label_f = predictions_asc[2][i]
                     if(sentence_f.find(term_f)!= -1 and term_f != ''):
