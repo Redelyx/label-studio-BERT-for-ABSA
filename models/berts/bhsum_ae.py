@@ -4,8 +4,6 @@ import torch.nn as nn
 from torchcrf import CRF
 
 from transformers import BertModel, BertPreTrainedModel, BertLayer
-from transformers.models.bert.modeling_bert import BertPooler
-
 
 class HSUM(nn.Module):
     def __init__(self, count, config, num_labels):

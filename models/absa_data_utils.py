@@ -274,7 +274,7 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
             if len(lb) > max_seq_length - 2:
                 lb = lb[0:(max_seq_length - 2)]
             label_id[1:len(lb)+1] = lb
-
+            
         features.append(
                 InputFeatures(
                         input_ids=input_ids,

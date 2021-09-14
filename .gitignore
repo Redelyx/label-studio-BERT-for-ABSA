@@ -101,3 +101,15 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+*.bat
+*.txt
+*.DLL
+*.def
+*.pt
+
+my-ml-backend-absa/
+my-ml-backend-ae/
+my-ml-backend-asc/
+models/pt_model/

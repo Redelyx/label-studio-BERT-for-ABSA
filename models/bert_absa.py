@@ -5,7 +5,6 @@ from label_studio_ml.model import LabelStudioMLBase
 from absa_data_utils import Prediction, ABSATokenizer, InputExample
 import absa_data_utils as data_utils
 from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
-import pick_bert
 import modelconfig
  
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -26,12 +25,12 @@ class BertABSA(LabelStudioMLBase):
         self.ae_label_list = self.ae_processor.get_labels()
         self.asc_processor = data_utils.AscProcessor()
         self.asc_label_list = self.asc_processor.get_labels()
-        self.domain = pick_bert.pick_domain()
+        self.domain = modelconfig.pick_domain()
         self.bert = dir_path + "/" + modelconfig.MODEL_ARCHIVE_MAP[self.domain]
         self.tokenizer = ABSATokenizer.from_pretrained(self.bert)
         self.bert_tasks = ["ae", "asc"]
-        self.ae_model = pick_bert.pick_model(self.bert_tasks[0], self.bert, self.ae_label_list)
-        self.asc_model = pick_bert.pick_model(self.bert_tasks[1], self.bert, self.asc_label_list)
+        self.ae_model = modelconfig.pick_model(self.bert_tasks[0], self.bert, self.ae_label_list)
+        self.asc_model = modelconfig.pick_model(self.bert_tasks[1], self.bert, self.asc_label_list)
         self.max_seq_length = 100
         self.batch_size = 3
 

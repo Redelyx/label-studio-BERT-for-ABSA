@@ -1,4 +1,4 @@
-from transformers import BertPreTrainedModel, BertModel
+from transformers import BertModel
 import torch
 from torch.autograd import grad
 

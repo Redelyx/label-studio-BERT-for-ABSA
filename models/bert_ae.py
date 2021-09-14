@@ -1,3 +1,4 @@
+import ipdb
 import torch
 import os
 from label_studio_ml.model import LabelStudioMLBase
@@ -31,6 +32,8 @@ class BertAE(LabelStudioMLBase):
         self.batch_size = 3
 
     def predict(self, tasks, **kwargs):
+        for task in tasks:
+            print(task)
         predictions = []
         prediction_tmp = []
         tokenized_tmp = []
@@ -61,8 +64,7 @@ class BertAE(LabelStudioMLBase):
         eval_sampler = SequentialSampler(eval_data)
         eval_dataloader = DataLoader(eval_data, sampler=eval_sampler, batch_size=self.batch_size)
 
-        self.model.to(device)
-        self.model.eval()
+        self.model.to(device)   
 
         for step, batch in enumerate(eval_dataloader):
             i = 0
@@ -108,4 +110,6 @@ class BertAE(LabelStudioMLBase):
             predictions.append({
                 'result': prediction,
             })
+        for pred in predictions: 
+            print(pred)
         return predictions

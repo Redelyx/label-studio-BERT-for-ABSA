@@ -4,8 +4,6 @@ task = "ae"              #ae (Aspect Extraction) or asc (Aspect Sentiment Classi
 btype = "hsum"           #at (Adversarial Training) or psum or hsum
 domain = "laptop"          #laptop or rest
 
-
-
 #others
 bert = domain + "_pt"    #laptop_pt or rest_pt
 run_dir = "pt_" + task   #pt_ae or pt_asc

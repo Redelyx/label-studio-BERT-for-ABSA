@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from transformers import BertPreTrainedModel, BertModel
+from transformers import BertModel
 import torch
 from torch.autograd import grad
 
