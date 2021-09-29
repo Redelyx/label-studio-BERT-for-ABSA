@@ -1,11 +1,9 @@
-import ipdb
 import torch
 import os
 from label_studio_ml.model import LabelStudioMLBase
 import absa_data_utils as data_utils
 from absa_data_utils import ABSATokenizer, Prediction, InputExample
-from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
-import pick_bert
+from torch.utils.data import TensorDataset, DataLoader, SequentialSampler 
 import modelconfig
  
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -23,11 +21,11 @@ class BertAE(LabelStudioMLBase):
         super(BertAE, self).__init__(**kwargs)
         self.processor = data_utils.AeProcessor()
         self.label_list = self.processor.get_labels()
-        self.domain = pick_bert.pick_domain()
+        self.domain = modelconfig.pick_domain()
         self.bert = dir_path + "/" + modelconfig.MODEL_ARCHIVE_MAP[self.domain]
         self.tokenizer = ABSATokenizer.from_pretrained(self.bert)
         self.bert_task = "ae"
-        self.model = pick_bert.pick_model(self.bert_task, self.bert, self.label_list)
+        self.model = modelconfig.pick_model(self.bert_task, self.bert, self.label_list)
         self.max_seq_length = 100
         self.batch_size = 3
 

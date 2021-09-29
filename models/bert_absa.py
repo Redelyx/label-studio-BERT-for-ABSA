@@ -19,14 +19,13 @@ else:
 
 class BertABSA(LabelStudioMLBase):
     def __init__(self, **kwargs):
-        # don't forget to initialize base class...
         super(BertABSA, self).__init__(**kwargs)
         self.ae_processor = data_utils.AeProcessor()
         self.ae_label_list = self.ae_processor.get_labels()
         self.asc_processor = data_utils.AscProcessor()
         self.asc_label_list = self.asc_processor.get_labels()
         self.domain = modelconfig.pick_domain()
-        self.bert = dir_path + "/" + modelconfig.MODEL_ARCHIVE_MAP[self.domain]
+        self.bert = dir_path + "/" + modelconfig.MODEL_ARCHIVE_MAP[self.domain +"_pt"]
         self.tokenizer = ABSATokenizer.from_pretrained(self.bert)
         self.bert_tasks = ["ae", "asc"]
         self.ae_model = modelconfig.pick_model(self.bert_tasks[0], self.bert, self.ae_label_list)
@@ -68,7 +67,6 @@ class BertABSA(LabelStudioMLBase):
             
             with torch.no_grad():
                 logits = self.ae_model(input_ids, segment_ids, input_mask)
-
                 argmax_logits = logits.softmax(2).max(2)[1]
                 max_logits = logits.softmax(2).max(2)[0]
 
@@ -202,5 +200,5 @@ class BertABSA(LabelStudioMLBase):
             predictions.append({
                 'result': prediction,
             })
-
+        print(predictions)
         return predictions
