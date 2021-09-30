@@ -71,16 +71,13 @@ robocopy models/berts my-ml-backend-asc/berts /E
 
 ##### Start ML backend at http://localhost:9090
 ```bash
-label-studio-ml start my-ml-backend-ae
+label-studio-ml start my-ml-backend-name
 ```
-or
-```bash
-label-studio-ml start my-ml-backend-asc
-```
+If you want to do the two tasks separately you have to create two projects on Label Studio and two backends, one for AE, one for ASC.
 
 ##### Start Label Studio with ML backend connection
 ```bash
-label-studio start my-annotation-project --init --ml-backend http://localhost:9090
+label-studio start my-project-name --init --ml-backend http://localhost:9090
 ```
 
 The browser opens at `http://localhost:8080`. Upload your data on **Import** page and retrieve your predictions.<br/>
@@ -96,8 +93,9 @@ You can find explanations for these instructions here:
 [Set up your labeling interface](https://labelstud.io/guide/setup.html)
 
 [Get data into Label Studio](https://labelstud.io/guide/tasks.html)
-### Set up your labeling interface on Label Studio
 
+
+### Set up your labeling interface on Label Studio
 
 This is the code for the ABSA labeling interface:
 ```html
