@@ -1,6 +1,7 @@
 # Label Studio for BERTforABSA
 
-
+Code for my degree thesis (in italian) [A dataset labeling support system for Aspect-Based Sentiment Analysis
+](https://github.com/Redelyx/BERT-for-ABSA/files/7260749/tesi_Alice_Cipriani.pdf)
 <br/>
 
 **Transfer learning for NLP models by annotating your textual data without any additional coding.**
