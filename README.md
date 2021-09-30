@@ -1,4 +1,4 @@
-# Label Studio for Transformers
+# Label Studio for BERTforABSA
 
 [Website](https://labelstud.io/) • [Docs](https://labelstud.io/guide) • [Twitter](https://twitter.com/heartexlabs) • [Join Slack Community <img src="https://go.heartex.net/docs/images/slack-mini.png" width="18px"/>](https://docs.google.com/forms/d/e/1FAIpQLSdLHZx5EeT1J350JPwnY2xLanfmvplJi6VZk65C2R4XSsRBHg/viewform?usp=sf_link)
 
@@ -9,11 +9,12 @@
 This package provides a ready-to-use container that links together:
 
 - [Label Studio](https://github.com/heartexlabs/label-studio) as annotation frontend
-- [Hugging Face's transformers](https://github.com/huggingface/transformers) as machine learning backend for NLP
+- [BERTforABSA models](https://github.com/Redelyx/BERT-for-ABSA) as machine learning backend for NLP
+- BERTforABSA is based on [Hugging Face's transformers](https://github.com/huggingface/transformers)
 
 <br/>
 
-[<img src="https://raw.githubusercontent.com/heartexlabs/label-studio-transformers/master/images/codeless.png" height="500">](https://github.com/heartexlabs/label-studio-transformers)
+![labelstudio-bertforabsa](https://user-images.githubusercontent.com/32637807/135485737-b8d3d540-bf66-410b-b817-26590aa63e57.png)
 
 ### Quick Usage
 
@@ -25,6 +26,25 @@ pip install -r requirements.txt
 ##### Download Bert models
 Place laptop and restaurant post-trained BERTs into ```pt_model/laptop_pt``` and ```pt_model/rest_pt```, respectively. The post-trained Laptop weights can be download [here](https://drive.google.com/file/d/1io-_zVW3sE6AbKgHZND4Snwh-wi32L4K/view?usp=sharing) and restaurant [here](https://drive.google.com/file/d/1TYk7zOoVEO8Isa6iP0cNtdDFAUlpnTyz/view?usp=sharing).
 
+See [BERTforABSA](https://github.com/Redelyx/BERT-for-ABSA) to obtain the fine-tuned models from training. 
+The two \*.pt files (one for Aspect Extraction, one for Aspect Sentiment Classification), have to be renamed by the following standard: 
+```model_task_domain.pt```
+where, model can be hsum, psum or at, task is ae or asc, domain can be rest or laptop.
+for example:
+```hsum_ae_laptop.pt
+hsum_asc_laptop.pt```
+
+##### Create ML backend for ABSA 
+```bash
+label-studio-ml init my-ml-backend-ae --script models/bert_absa.py
+cp models/absa_data_utils.py my-ml-backend-ae/absa_data_utils.py
+cp models/pick_bert.py my-ml-backend-ae/pick_bert.py
+cp models/modelconfig.py my-ml-backend-ae/modelconfig.py
+robocopy models/pt_model my-ml-backend-ae/pt_model /E
+robocopy models/berts my-ml-backend-ae/berts /E
+```
+
+You can also do the two tasks separately:
 ##### Create ML backend for ABSA Aspect Extraction
 ```bash
 label-studio-ml init my-ml-backend-ae --script models/bert_ae.py
@@ -61,9 +81,8 @@ label-studio-ml start my-ml-backend-asc
 label-studio start my-annotation-project --init --ml-backend http://localhost:9090
 ```
 
-The browser opens at `http://localhost:8080`. Upload your data on **Import** page ~then annotate by selecting **Labeling** page.
-Once you've annotate sufficient amount of data, go to **Model** page and press **Start Training** button. Once training is finished, model automatically starts serving for inference from Label Studio, and you'll find all model checkpoints inside `my-ml-backend/<ml-backend-id>/` directory.~
-(Not available yet)
+The browser opens at `http://localhost:8080`. Upload your data on **Import** page and retrieve your predictions.<br/>
+See my other repo [BERTforABSA](https://github.com/Redelyx/BERT-for-ABSA) to train bert-based models.
 
 
 [Click here](https://labelstud.io/guide/ml.html) to read more about how to use Machine Learning backend and build Human-in-the-Loop pipelines with Label Studio
@@ -76,6 +95,19 @@ You can find explanations for these instructions here:
 
 [Get data into Label Studio](https://labelstud.io/guide/tasks.html)
 ### Set up your labeling interface on Label Studio
+
+
+This is the code for the ABSA labeling interface:
+```html
+<View>
+  <Labels name="label" toName="text">
+    <Label value="positive" background="#00ff33"/>
+    <Label value="negative" background="#ff0000"/>
+    <Label value="neutral" background="#FFC069"/>
+  </Labels>
+  <Text name="text" value="$ner"/>
+</View>
+```
 
 This is the code for the AE labeling interface:
 ```html
@@ -104,19 +136,12 @@ This is the code for the ASC labeling interface:
 ```
 
 ### Import dataset
-
-For AE task you can import a *.txt file with one sentence per line.
-For ASC task you can import a *.tsv file similiar to this:
+For ABSA you can import a \*.txt file with one sentence per line.<br/>
+For AE task you can import a \*.txt file with one sentence per line.<br/>
+For ASC task you can import a \*.tsv file similiar to this:<br/>
 ```
 sentence	term
 The screen is nice, side view angles are pretty good	screen
 Applications respond immediately (not like the tired MS applications).	Applications
 i also love having the extra calculator number set up on the keyboard.	calculator number
 ```
-
-
-## License
-
-This software is licensed under the [Apache 2.0 LICENSE](/LICENSE) © [Heartex](https://www.heartex.ai/). 2020
-
-<img src="https://github.com/heartexlabs/label-studio/blob/master/images/opossum_looking.png?raw=true" title="Hey everyone!" height="140" width="140" />
