@@ -31,8 +31,10 @@ The two \*.pt files (one for Aspect Extraction, one for Aspect Sentiment Classif
 ```model_task_domain.pt```
 where, model can be hsum, psum or at, task is ae or asc, domain can be rest or laptop.
 for example:
-```hsum_ae_laptop.pt
-hsum_asc_laptop.pt```
+```
+hsum_ae_laptop.pt
+hsum_asc_laptop.pt
+```
 
 ##### Create ML backend for ABSA 
 ```bash
